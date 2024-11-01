@@ -1,0 +1,367 @@
+about:
+  date: November 01, 2024 13:43:22
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 14
+  number_tables: 13
+info_toggle_checked: true
+resources:
+  Brand:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: origin_country
+    - name: description
+    - name: id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - brand_id
+      name: ProductList
+      resource: Product
+    type: Brand
+    user_key: name
+  Cart:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: created_at
+      type: DATETIME
+    tab_groups:
+    - direction: tomany
+      fks:
+      - cart_id
+      name: CartItemList
+      resource: CartItem
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Cart
+    user_key: id
+  CartItem:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: cart_id
+    - name: product_id
+    - name: quantity
+      required: true
+    tab_groups:
+    - direction: toone
+      fks:
+      - cart_id
+      name: cart
+      resource: Cart
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: CartItem
+    user_key: id
+  Category:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - category_id
+      name: ProductList
+      resource: Product
+    type: Category
+    user_key: name
+  Coupon:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: code
+      required: true
+    - name: discount_percentage
+      required: true
+    - name: expiry_date
+      type: DATETIME
+    - name: id
+    type: Coupon
+    user_key: description
+  Customer:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: last_name
+      required: true
+    - name: email
+      required: true
+    - name: phone
+    - name: address
+    - name: id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: CartList
+      resource: Cart
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - customer_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - customer_id
+      name: WishlistList
+      resource: Wishlist
+    type: Customer
+    user_key: first_name
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: total_amount
+    - name: status
+    - name: date_ordered
+      type: DATETIME
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderDetailList
+      resource: OrderDetail
+    - direction: tomany
+      fks:
+      - order_id
+      name: PaymentList
+      resource: Payment
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+    user_key: id
+  OrderDetail:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+    - name: product_id
+    - name: quantity
+      required: true
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: OrderDetail
+    user_key: id
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+    - name: payment_date
+      required: true
+      type: DATETIME
+    - name: amount
+      required: true
+    - name: payment_method
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    type: Payment
+    user_key: id
+  Product:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: brand_id
+    - name: category_id
+    - name: price
+      required: true
+    - name: size
+      required: true
+    - name: stock
+    - name: description
+    - name: id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: CartItemList
+      resource: CartItem
+    - direction: tomany
+      fks:
+      - product_id
+      name: OrderDetailList
+      resource: OrderDetail
+    - direction: tomany
+      fks:
+      - product_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - product_id
+      name: WishlistItemList
+      resource: WishlistItem
+    - direction: toone
+      fks:
+      - brand_id
+      name: brand
+      resource: Brand
+    - direction: toone
+      fks:
+      - category_id
+      name: category
+      resource: Category
+    type: Product
+    user_key: name
+  Review:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: product_id
+    - name: rating
+      required: true
+    - name: comment
+    - name: review_date
+      type: DATETIME
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Review
+    user_key: id
+  Wishlist:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: customer_id
+    - name: created_at
+      type: DATETIME
+    - name: id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - wishlist_id
+      name: WishlistItemList
+      resource: WishlistItem
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Wishlist
+    user_key: name
+  WishlistItem:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: wishlist_id
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - wishlist_id
+      name: wishlist
+      resource: Wishlist
+    type: WishlistItem
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

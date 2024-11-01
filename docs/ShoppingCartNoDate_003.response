@@ -1,0 +1,84 @@
+{
+    "models": [
+        {
+            "classname": "Category",
+            "code": "class Category(Base):\n    __tablename__ = 'category'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    description = Column(String)\n\n    \"\"\"\n    description: Represents different categories in the store, such as 'Casual', 'Sports', 'Formal'.\n    \"\"\"",
+            "description": "Represents different categories in the store, such as 'Casual', 'Sports', 'Formal'.",
+            "name": "Category"
+        },
+        {
+            "classname": "Brand",
+            "code": "class Brand(Base):\n    __tablename__ = 'brand'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    origin_country = Column(String)\n    description = Column(String)\n\n    \"\"\"\n    description: Contains details about different brands of golf shoes.\n    \"\"\"",
+            "description": "Contains details about different brands of golf shoes.",
+            "name": "Brand"
+        },
+        {
+            "classname": "Product",
+            "code": "class Product(Base):\n    __tablename__ = 'product'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    price = Column(Float, nullable=False)\n    size = Column(Integer, nullable=False)\n    category_id = Column(Integer, ForeignKey('category.id'))\n    brand_id = Column(Integer, ForeignKey('brand.id'))\n    stock = Column(Integer, default=0)\n    description = Column(String)\n\n    \"\"\"\n    description: Represents individual golf shoes offered for sale, including price, size, and stock.\n    \"\"\"",
+            "description": "Represents individual golf shoes offered for sale, including price, size, and stock.",
+            "name": "Product"
+        },
+        {
+            "classname": "Customer",
+            "code": "class Customer(Base):\n    __tablename__ = 'customer'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n    email = Column(String, nullable=False)\n    phone = Column(String)\n    address = Column(String)\n\n    \"\"\"\n    description: Contains customer data, such as name, email, and contact information.\n    \"\"\"",
+            "description": "Contains customer data, such as name, email, and contact information.",
+            "name": "Customer"
+        },
+        {
+            "classname": "Order",
+            "code": "class Order(Base):\n    __tablename__ = 'order'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    date_ordered = Column(DateTime, default=datetime.utcnow)\n    total_amount = Column(Float)\n    status = Column(String, default='Pending')\n\n    \"\"\"\n    description: Represents customer orders and includes order status and total amount.\n    \"\"\"",
+            "description": "Represents customer orders and includes order status and total amount.",
+            "name": "Order"
+        },
+        {
+            "classname": "OrderDetail",
+            "code": "class OrderDetail(Base):\n    __tablename__ = 'order_detail'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    order_id = Column(Integer, ForeignKey('order.id'))\n    product_id = Column(Integer, ForeignKey('product.id'))\n    quantity = Column(Integer, nullable=False)\n\n    \"\"\"\n    description: Details of products in each order including quantity of each product.\n    \"\"\"",
+            "description": "Details of products in each order including quantity of each product.",
+            "name": "OrderDetail"
+        },
+        {
+            "classname": "Cart",
+            "code": "class Cart(Base):\n    __tablename__ = 'cart'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    created_at = Column(DateTime, default=datetime.utcnow)\n\n    \"\"\"\n    description: Stores information about shopping carts linked to individual customers.\n    \"\"\"",
+            "description": "Stores information about shopping carts linked to individual customers.",
+            "name": "Cart"
+        },
+        {
+            "classname": "CartItem",
+            "code": "class CartItem(Base):\n    __tablename__ = 'cart_item'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    cart_id = Column(Integer, ForeignKey('cart.id'))\n    product_id = Column(Integer, ForeignKey('product.id'))\n    quantity = Column(Integer, nullable=False)\n\n    \"\"\"\n    description: Represents products added to a customer's shopping cart with their quantities.\n    \"\"\"",
+            "description": "Represents products added to a customer's shopping cart with their quantities.",
+            "name": "CartItem"
+        },
+        {
+            "classname": "Payment",
+            "code": "class Payment(Base):\n    __tablename__ = 'payment'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    order_id = Column(Integer, ForeignKey('order.id'))\n    payment_date = Column(DateTime, nullable=False, default=datetime.utcnow)\n    amount = Column(Float, nullable=False)\n    payment_method = Column(String)\n\n    \"\"\"\n    description: Stores details of payments made for orders, including the payment method.\n    \"\"\"",
+            "description": "Stores details of payments made for orders, including the payment method.",
+            "name": "Payment"
+        },
+        {
+            "classname": "Review",
+            "code": "class Review(Base):\n    __tablename__ = 'review'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    product_id = Column(Integer, ForeignKey('product.id'))\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    rating = Column(Integer, nullable=False)\n    comment = Column(String)\n    review_date = Column(DateTime, default=datetime.utcnow)\n\n    \"\"\"\n    description: Captures customer reviews and ratings for specific products.\n    \"\"\"",
+            "description": "Captures customer reviews and ratings for specific products.",
+            "name": "Review"
+        },
+        {
+            "classname": "Coupon",
+            "code": "class Coupon(Base):\n    __tablename__ = 'coupon'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    code = Column(String, nullable=False)\n    discount_percentage = Column(Float, nullable=False)\n    expiry_date = Column(DateTime)\n    description = Column(String)\n\n    \"\"\"\n    description: Represents discount coupons that customers can apply to orders.\n    \"\"\"",
+            "description": "Represents discount coupons that customers can apply to orders.",
+            "name": "Coupon"
+        },
+        {
+            "classname": "Wishlist",
+            "code": "class Wishlist(Base):\n    __tablename__ = 'wishlist'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    name = Column(String, nullable=False)\n    created_at = Column(DateTime, default=datetime.utcnow)\n\n    \"\"\"\n    description: Stores lists of desired products by customers, often for future purchasing.\n    \"\"\"",
+            "description": "Stores lists of desired products by customers, often for future purchasing.",
+            "name": "Wishlist"
+        },
+        {
+            "classname": "WishlistItem",
+            "code": "class WishlistItem(Base):\n    __tablename__ = 'wishlist_item'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    wishlist_id = Column(Integer, ForeignKey('wishlist.id'))\n    product_id = Column(Integer, ForeignKey('product.id'))\n\n    \"\"\"\n    description: Keeps track of specific products contained in a customer's wishlist.\n    \"\"\"",
+            "description": "Keeps track of specific products contained in a customer's wishlist.",
+            "name": "WishlistItem"
+        }
+    ],
+    "rules": [],
+    "test_data": "# Assuming Base, engine, and session have been defined, and metadata created\n\n# Populate Category Table\ncategories = [\n    Category(name='Sports', description='Sports category for athletic use'),\n    Category(name='Casual', description='Casual and everyday use'),\n    Category(name='Formal', description='Formal shoes suitable for dress events'),\n]\n\n# Populate Brand Table\nbrands = [\n    Brand(name='Nike', origin_country='USA', description='Leading sports brand'),\n    Brand(name='Adidas', origin_country='Germany', description='Global sportswear manufacturer'),\n    Brand(name='Puma', origin_country='Germany', description='Another top sportswear brand'),\n]\n\n# Populate Product Table\nproducts = [\n    Product(name='Nike Air Max', price=150.0, size=42, category_id=1, brand_id=1, stock=100),\n    Product(name='Adidas Ultraboost', price=180.0, size=40, category_id=1, brand_id=2, stock=50),\n    Product(name='Puma Suede Classic', price=85.0, size=43, category_id=2, brand_id=3, stock=70),\n]\n\n# Populate Customer Table\ncustomers = [\n    Customer(first_name='John', last_name='Doe', email='john.doe@example.com', phone='1234567890', address='123 Elm Street'),\n    Customer(first_name='Jane', last_name='Smith', email='jane.smith@example.com', phone='0987654321', address='456 Oak Avenue'),\n]\n\n# Populate Order Table\norders = [\n    Order(customer_id=1, total_amount=300.0, status='Completed'),\n    Order(customer_id=2, total_amount=85.0, status='Pending'),\n]\n\n# Populate OrderDetail Table\norder_details = [\n    OrderDetail(order_id=1, product_id=1, quantity=2),\n    OrderDetail(order_id=2, product_id=3, quantity=1),\n]\n\n# Populate Cart Table\ncarts = [\n    Cart(customer_id=1),\n    Cart(customer_id=2)\n]\n\n# Populate CartItem Table\ncart_items = [\n    CartItem(cart_id=1, product_id=1, quantity=1),\n    CartItem(cart_id=2, product_id=2, quantity=3),\n]\n\n# Populate Payment Table\npayments = [\n    Payment(order_id=1, amount=300.0, payment_method='Credit Card'),\n    Payment(order_id=2, amount=85.0, payment_method='PayPal'),\n]\n\n# Populate Review Table\nreviews = [\n    Review(product_id=1, customer_id=1, rating=5, comment='Great shoes, very comfortable.'),\n    Review(product_id=2, customer_id=2, rating=4, comment='Good design, but runs small.'),\n]\n\n# Populate Coupon Table\ncoupons = [\n    Coupon(code='DISCOUNT10', discount_percentage=10.0, expiry_date=datetime(2024, 12, 31)),\n    Coupon(code='FREESHIP', discount_percentage=0.0, expiry_date=datetime(2025, 1, 31)),\n]\n\n# Populate Wishlist\nwishlists = [\n    Wishlist(customer_id=1, name='John\u2019s Desired'),\n    Wishlist(customer_id=2, name='Jane\u2019s Picks'),\n]\n\n# Populate WishlistItem\nwishlist_items = [\n    WishlistItem(wishlist_id=1, product_id=2),\n    WishlistItem(wishlist_id=2, product_id=1),\n]\n\n# Insert all data into the database\nentities = categories + brands + products + customers + orders + order_details + carts + cart_items + payments + reviews + coupons + wishlists + wishlist_items\n\nsession.add_all(entities)\nsession.commit()"
+}
